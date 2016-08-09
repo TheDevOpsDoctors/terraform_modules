@@ -1,42 +1,42 @@
-resource "aws_vpc" "app_vpc" {
-  cidr_block = "10.43.0.0/16"
+resource "aws_vpc" "vpc" {
+  cidr_block = "${var.cidr_16_bit_prefix}.0.0/16"
   enable_dns_support = true
   enable_dns_hostnames = true
   tags {
-    Name = "wbe"
-    app_name = "wbe"
+    Name = "${var.app_name}"
+    var.app_name = "${var.app_name}"
   }
 }
 
-resource "aws_internet_gateway" "app_vpc_vpc" {
-  vpc_id = "${aws_vpc.app_vpc.id}"
+resource "aws_internet_gateway" "main" {
+  vpc_id = "${aws_vpc.vpc.id}"
   tags {
-    Name = "wbe_pub"
-    app_name = "wbe"
+    Name = "${var.app_name}_pub"
+    var.app_name = "${var.app_name}"
   }
 }
 
-resource "aws_route_table" "app_vpc_pub" {
-  vpc_id = "${aws_vpc.app_vpc.id}"
+resource "aws_route_table" "pub" {
+  vpc_id = "${aws_vpc.vpc.id}"
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.app_vpc_vpc.id}"
+    gateway_id = "${aws_internet_gateway.main.id}"
   }
   tags {
-    Name = "wbe_pub"
-    app_name = "wbe"
+    Name = "${var.app_name}_pub"
+    var.app_name = "${var.app_name}"
   }
 }
 
-resource "aws_route_table" "app_vpc_pri" {
-  vpc_id = "${aws_vpc.app_vpc.id}"
+resource "aws_route_table" "pri" {
+  vpc_id = "${aws_vpc.vpc.id}"
   tags {
-    Name = "wbe_pri"
-    app_name = "wbe"
+    Name = "${var.app_name}_pri"
+    var.app_name = "${var.app_name}"
   }
 }
 
-resource "aws_main_route_table_association" "app_vpc_default_rt" {
-  vpc_id = "${aws_vpc.app_vpc.id}"
-  route_table_id = "${aws_route_table.app_vpc_pri.id}"
+resource "aws_main_route_table_association" "default_rt" {
+  vpc_id = "${aws_vpc.vpc.id}"
+  route_table_id = "${aws_route_table.pri.id}"
 }
