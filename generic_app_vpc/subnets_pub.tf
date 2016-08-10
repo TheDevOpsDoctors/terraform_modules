@@ -1,32 +1,11 @@
-resource "aws_subnet" "pub_1" {
+resource "aws_subnet" "pub" {
   vpc_id = "${aws_vpc.vpc.id}"
-  cidr_block = "${var.cidr_16_bit_prefix}.0.0/19"
-  availability_zone = "eu-west-1a"
+  count = "${length(var.pub_subnet_mask_suffixes)}"
+  cidr_block = "${var.cidr_16_bit_prefix}.${var.pub_subnet_mask_suffixes[count.index]}"
+  availability_zone = "${element(split(",", var.availability_zones[var.region]), count.index)}"
   map_public_ip_on_launch = true
   tags {
-    Name = "${var.app_name}_pub_1"
-    app_name = "${var.app_name}"
-  }
-}
-
-resource "aws_subnet" "pub_2" {
-  vpc_id = "${aws_vpc.vpc.id}"
-  cidr_block = "${var.cidr_16_bit_prefix}.32.0/19"
-  availability_zone = "eu-west-1b"
-  map_public_ip_on_launch = true
-  tags {
-    Name = "${var.app_name}_pub_2"
-    app_name = "${var.app_name}"
-  }
-}
-
-resource "aws_subnet" "pub_3" {
-  vpc_id = "${aws_vpc.vpc.id}"
-  cidr_block = "${var.cidr_16_bit_prefix}.64.0/19"
-  availability_zone = "eu-west-1c"
-  map_public_ip_on_launch = true
-  tags {
-    Name = "${var.app_name}_pub_3"
+    Name = "${var.app_name}_pub_${count.index}"
     app_name = "${var.app_name}"
   }
 }

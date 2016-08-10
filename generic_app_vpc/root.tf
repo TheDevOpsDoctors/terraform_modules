@@ -4,7 +4,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
   tags {
     Name = "${var.app_name}"
-    var.app_name = "${var.app_name}"
+    app_name = "${var.app_name}"
   }
 }
 
@@ -12,7 +12,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = "${aws_vpc.vpc.id}"
   tags {
     Name = "${var.app_name}_pub"
-    var.app_name = "${var.app_name}"
+    app_name = "${var.app_name}"
   }
 }
 
@@ -24,7 +24,7 @@ resource "aws_route_table" "pub" {
   }
   tags {
     Name = "${var.app_name}_pub"
-    var.app_name = "${var.app_name}"
+    app_name = "${var.app_name}"
   }
 }
 
@@ -32,7 +32,7 @@ resource "aws_route_table" "pri" {
   vpc_id = "${aws_vpc.vpc.id}"
   tags {
     Name = "${var.app_name}_pri"
-    var.app_name = "${var.app_name}"
+    app_name = "${var.app_name}"
   }
 }
 
