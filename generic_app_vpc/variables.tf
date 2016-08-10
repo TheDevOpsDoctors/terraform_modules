@@ -1,6 +1,6 @@
 variable "region" {}
 
-variable "cidr_16_bit_prefix" {}
+variable "subnet_mask_prefix" {}
 
 variable "app_name" {}
 
