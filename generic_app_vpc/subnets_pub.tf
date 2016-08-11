@@ -9,3 +9,9 @@ resource "aws_subnet" "pub" {
     app_name = "${var.app_name}"
   }
 }
+
+resource "aws_route_table_association" "pub_route_table_association" {
+  count = "${length(var.pub_subnet_mask_suffixes)}"
+  subnet_id = "${element(aws_subnet.pub.*.id, count.index)}"
+  route_table_id = "${aws_route_table.pub.id}"
+}
