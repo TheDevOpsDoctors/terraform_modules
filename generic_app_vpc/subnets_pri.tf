@@ -5,7 +5,8 @@ resource "aws_subnet" "pri" {
   availability_zone = "${element(split(",", var.availability_zones[var.region]), count.index)}"
   map_public_ip_on_launch = false
   tags {
-    Name = "${var.app_name}_pri_${count.index}"
+    Name = "${var.app_name}_${var.env}_pri_${count.index}"
     app_name = "${var.app_name}"
+    env = "${var.env}"
   }
 }

@@ -3,16 +3,18 @@ resource "aws_vpc" "vpc" {
   enable_dns_support = true
   enable_dns_hostnames = true
   tags {
-    Name = "${var.app_name}"
+    Name = "${var.app_name}_${var.env}"
     app_name = "${var.app_name}"
+    env = "${var.env}"
   }
 }
 
 resource "aws_internet_gateway" "main" {
   vpc_id = "${aws_vpc.vpc.id}"
   tags {
-    Name = "${var.app_name}_pub"
+    Name = "${var.app_name}_${var.env}_pub"
     app_name = "${var.app_name}"
+    env = "${var.env}"
   }
 }
 
@@ -23,16 +25,18 @@ resource "aws_route_table" "pub" {
     gateway_id = "${aws_internet_gateway.main.id}"
   }
   tags {
-    Name = "${var.app_name}_pub"
+    Name = "${var.app_name}_${var.env}_pub"
     app_name = "${var.app_name}"
+    env = "${var.env}"
   }
 }
 
 resource "aws_route_table" "pri" {
   vpc_id = "${aws_vpc.vpc.id}"
   tags {
-    Name = "${var.app_name}_pri"
+    Name = "${var.app_name}_${var.env}_pri"
     app_name = "${var.app_name}"
+    env = "${var.env}"
   }
 }
 
